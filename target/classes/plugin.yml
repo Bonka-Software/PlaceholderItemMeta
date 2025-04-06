@@ -1,0 +1,4 @@
+name: PlaceholderItemMeta
+version: '1.0-SNAPSHOT'
+main: gg.bonka.placeholderItemMeta.PlaceholderItemMeta
+api-version: '1.21'
