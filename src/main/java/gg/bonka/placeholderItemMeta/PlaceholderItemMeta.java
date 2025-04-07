@@ -1,5 +1,7 @@
 package gg.bonka.placeholderItemMeta;
 
+import co.aikar.commands.PaperCommandManager;
+import gg.bonka.placeholderItemMeta.commands.PIMCommand;
 import gg.bonka.placeholderItemMeta.configuration.PIMConfig;
 import gg.bonka.placeholderItemMeta.debugging.PlayerJoinListener;
 import gg.bonka.placeholderItemMeta.items.listener.ItemPacketListener;
@@ -26,6 +28,9 @@ public final class PlaceholderItemMeta extends JavaPlugin {
         new ItemPacketListener();
 
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
+
+        PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.registerCommand(new PIMCommand());
 
         ConsoleLogger.info(String.format("PlaceholderItemMeta [%s] has been enabled!", version));
     }

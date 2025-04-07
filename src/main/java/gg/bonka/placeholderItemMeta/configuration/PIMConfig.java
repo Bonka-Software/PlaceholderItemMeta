@@ -18,10 +18,11 @@ public class PIMConfig extends CustomConfig {
     public PIMConfig() {
         super(PlaceholderItemMeta.getInstance().getDataFolder(), "config.yml");
 
-        if(instance != null)
-            throw new IllegalStateException("PIMConfig instance already exists!");
-
         instance = this;
+    }
+
+    public static void reload() {
+        new PIMConfig();
     }
 
     @Override
