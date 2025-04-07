@@ -2,11 +2,14 @@ package gg.bonka.placeholderItemMeta.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import gg.bonka.placeholderItemMeta.PlaceholderItemMeta;
 import gg.bonka.placeholderItemMeta.configuration.PIMConfig;
 import gg.bonka.placeholderItemMeta.logging.ConsoleLogger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 @CommandAlias("pim")
 @CommandPermission("pim.command")
@@ -27,7 +30,11 @@ public class PIMCommand extends BaseCommand {
     public void onReloadCommand(Player player) {
         ConsoleLogger.info(String.format("%s started reloading PlaceholderItemMeta.", player.getName()));
 
+        HandlerList.unregisterAll(PlaceholderItemMeta.getInstance().getAnvilListener());
         PIMConfig.reload();
+
+        if(PIMConfig.getInstance().getBlockAnvilPlaceholders())
+            Bukkit.getPluginManager().registerEvents(PlaceholderItemMeta.getInstance().getAnvilListener(), PlaceholderItemMeta.getInstance());
 
         player.sendMessage(Component.text("Reloaded placeholder item meta.").color(NamedTextColor.GREEN));
         player.sendMessage(Component.text("Items need to be interacted with before being updated on your client.").color(NamedTextColor.GRAY));

@@ -14,6 +14,7 @@ public class PIMConfig extends CustomConfig {
     private static PIMConfig instance;
 
     private List<String> whitelistedPersistentDataContainers;
+    private Boolean blockAnvilPlaceholders;
 
     public PIMConfig() {
         super(PlaceholderItemMeta.getInstance().getDataFolder(), "config.yml");
@@ -28,6 +29,7 @@ public class PIMConfig extends CustomConfig {
     @Override
     public void save() {
         put("whitelisted-persistent-data-containers", getWhitelistedPersistentDataContainers());
+        put("block-anvil-placeholders", getBlockAnvilPlaceholders());
 
         try {
             super.save();
@@ -38,6 +40,18 @@ public class PIMConfig extends CustomConfig {
 
     public List<String> getWhitelistedPersistentDataContainers() {
         return getStringList(whitelistedPersistentDataContainers, "whitelisted-persistent-data-containers");
+    }
+
+    public boolean getBlockAnvilPlaceholders() {
+        return getBoolean(blockAnvilPlaceholders, "block-anvil-placeholders");
+    }
+
+    private boolean getBoolean(Boolean bool, String key) {
+        if(bool == null) {
+            bool = Boolean.parseBoolean(getStringKey(key));
+        }
+
+        return Boolean.TRUE.equals(bool);
     }
 
     private List<String> getStringList(List<String> array, String path) {

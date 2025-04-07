@@ -3,3 +3,6 @@
 # It's important to note that users will be able to use placeholders on any item using an anvil if this setting isn't used.
 # This will still be possible for items that have a persistent data container, so you may want to block anvil use for these items.
 whitelisted-persistent-data-containers: []
+
+# Blocks players from using placeholders when renaming an item in an anvil.
+block-anvil-placeholders: false
