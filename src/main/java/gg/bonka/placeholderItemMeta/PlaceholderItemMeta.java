@@ -1,7 +1,10 @@
 package gg.bonka.placeholderItemMeta;
 
+import gg.bonka.placeholderItemMeta.debugging.PlayerJoinListener;
+import gg.bonka.placeholderItemMeta.items.listener.ItemPacketListener;
 import gg.bonka.placeholderItemMeta.logging.ConsoleLogger;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PlaceholderItemMeta extends JavaPlugin {
@@ -18,6 +21,10 @@ public final class PlaceholderItemMeta extends JavaPlugin {
 
         instance = this;
         ConsoleLogger.info(String.format("PlaceholderItemMeta [%s] has been enabled!", version));
+
+        new ItemPacketListener();
+
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
     @Override
