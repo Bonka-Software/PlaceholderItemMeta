@@ -1,16 +1,19 @@
 package gg.bonka.placeholderItemMeta.debugging;
 
+import gg.bonka.placeholderItemMeta.PlaceholderItemMeta;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -34,6 +37,8 @@ public class PlayerJoinListener implements Listener {
                 MiniMessage.miniMessage().deserialize("<white>I know your name is: <green>%player_name%</green></white>").decoration(TextDecoration.ITALIC, false),
                 MiniMessage.miniMessage().deserialize("<gray>Because I'm a packet based item!</gray>")
         );
+
+        meta.getPersistentDataContainer().set(new NamespacedKey(PlaceholderItemMeta.getInstance(), "test"), PersistentDataType.BOOLEAN, true);
 
         meta.lore(lore);
         item.setItemMeta(meta);

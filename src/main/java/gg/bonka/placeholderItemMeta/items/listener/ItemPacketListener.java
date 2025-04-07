@@ -6,9 +6,11 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import gg.bonka.placeholderItemMeta.PlaceholderItemMeta;
+import gg.bonka.placeholderItemMeta.configuration.PIMConfig;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -54,9 +56,18 @@ public class ItemPacketListener {
 
     private ItemStack parseItem(Player player, ItemStack item) {
         if(item == null || !item.hasItemMeta())
-            return null;
+            return item;
 
         ItemMeta meta = item.getItemMeta();
+
+        List<String> whitelistedContainers = PIMConfig.getInstance().getWhitelistedPersistentDataContainers();
+
+        if (!whitelistedContainers.isEmpty() &&
+            whitelistedContainers.stream().noneMatch(container ->
+                meta.getPersistentDataContainer().has(new NamespacedKey(PlaceholderItemMeta.getInstance(), container))
+            )) {
+            return item;
+        }
 
         String itemName = PlaceholderAPI.setPlaceholders(player, MiniMessage.miniMessage().serialize(item.effectiveName()));
         meta.itemName(MiniMessage.miniMessage().deserialize(itemName));

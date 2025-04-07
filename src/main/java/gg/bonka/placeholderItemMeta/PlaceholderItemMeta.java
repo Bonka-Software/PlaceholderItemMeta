@@ -1,5 +1,6 @@
 package gg.bonka.placeholderItemMeta;
 
+import gg.bonka.placeholderItemMeta.configuration.PIMConfig;
 import gg.bonka.placeholderItemMeta.debugging.PlayerJoinListener;
 import gg.bonka.placeholderItemMeta.items.listener.ItemPacketListener;
 import gg.bonka.placeholderItemMeta.logging.ConsoleLogger;
@@ -20,11 +21,13 @@ public final class PlaceholderItemMeta extends JavaPlugin {
             throw new IllegalStateException("PlaceholderItemMeta instance already exists!");
 
         instance = this;
-        ConsoleLogger.info(String.format("PlaceholderItemMeta [%s] has been enabled!", version));
+        new PIMConfig().save();
 
         new ItemPacketListener();
 
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
+
+        ConsoleLogger.info(String.format("PlaceholderItemMeta [%s] has been enabled!", version));
     }
 
     @Override
