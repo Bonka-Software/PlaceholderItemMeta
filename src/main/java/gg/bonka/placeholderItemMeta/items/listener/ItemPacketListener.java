@@ -21,6 +21,7 @@ public class ItemPacketListener {
 
     public ItemPacketListener() {
         // 0x13 Set container content
+        // https://minecraft.wiki/w/Java_Edition_protocol#Set_Container_Content
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), PacketType.Play.Server.WINDOW_ITEMS) {
             @Override
             public void onPacketSending(PacketEvent event) {
@@ -37,6 +38,8 @@ public class ItemPacketListener {
             }
         });
 
+        // 0x15 Set Container Slot
+        // https://minecraft.wiki/w/Java_Edition_protocol#Set_Container_Slot
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), PacketType.Play.Server.SET_SLOT) {
             @Override
             public void onPacketSending(PacketEvent event) {
@@ -50,13 +53,10 @@ public class ItemPacketListener {
     }
 
     private ItemStack parseItem(Player player, ItemStack item) {
-        if(item == null)
+        if(item == null || !item.hasItemMeta())
             return null;
 
         ItemMeta meta = item.getItemMeta();
-
-        if(meta == null)
-            return item;
 
         String itemName = PlaceholderAPI.setPlaceholders(player, MiniMessage.miniMessage().serialize(item.effectiveName()));
         meta.itemName(MiniMessage.miniMessage().deserialize(itemName));
