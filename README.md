@@ -32,3 +32,5 @@ This version of PIM contains:
 This plugin is currently a bit too simple for an API. Please consider opening an issue if you do need to access certain parts of the plugin, I'll be happy to help!
 
 You are also free to fork this project for your own use or contribute to the project, I don't have strict guidelines, but please try to adept a bit to the current code style, this will keep the project easy to read :)
+
+Curious about how I change the itemstack packets? It mainly happens [here](https://github.com/Bonka-Software/PlaceholderItemMeta/blob/main/src/main/java/gg/bonka/placeholderItemMeta/items/listener/ItemPacketListener.java), this is the best place to start exploring the codebase!
