@@ -2,9 +2,12 @@ package gg.bonka.placeholderItemMeta.items.listener;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.Pair;
 import gg.bonka.placeholderItemMeta.PlaceholderItemMeta;
 import gg.bonka.placeholderItemMeta.configuration.PIMConfig;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -24,7 +27,7 @@ public class ItemPacketListener {
     public ItemPacketListener() {
         // 0x13 Set container content
         // https://minecraft.wiki/w/Java_Edition_protocol#Set_Container_Content
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), PacketType.Play.Server.WINDOW_ITEMS) {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Server.WINDOW_ITEMS) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 PacketContainer packet = event.getPacket();
@@ -40,9 +43,27 @@ public class ItemPacketListener {
             }
         });
 
+        // 0x60 Set Equipment
+        // https://minecraft.wiki/w/Java_Edition_protocol#Set_Equipment
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Server.ENTITY_EQUIPMENT) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                PacketContainer packet = event.getPacket();
+                int entityId = packet.getIntegers().read(0);
+
+                if(entityId != event.getPlayer().getEntityId())
+                    return;
+
+                List<Pair<EnumWrappers.ItemSlot, ItemStack>> packetItems = event.getPacket().getSlotStackPairLists().read(0);
+                packetItems.replaceAll(itemSlotItemStackPair -> new Pair<>(itemSlotItemStackPair.getFirst(), parseItem(event.getPlayer(), itemSlotItemStackPair.getSecond())));
+
+                event.setPacket(packet);
+            }
+        });
+
         // 0x15 Set Container Slot
         // https://minecraft.wiki/w/Java_Edition_protocol#Set_Container_Slot
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), PacketType.Play.Server.SET_SLOT) {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(PlaceholderItemMeta.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Server.SET_SLOT) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 PacketContainer packet = event.getPacket();

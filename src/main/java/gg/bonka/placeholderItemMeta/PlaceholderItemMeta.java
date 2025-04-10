@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Setter
 public final class PlaceholderItemMeta extends JavaPlugin {
 
-    private final static String version = "1.0.0";
+    private final static String version = "1.0.1";
 
     @Getter
     private static PlaceholderItemMeta instance;
